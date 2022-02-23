@@ -5,26 +5,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Forca</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .tela {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .janela {
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        .esquerda {
+            margin: 2rem;
+            
+        }
+        .div-jogo {
+            margin-right: 5px;
+            display: flex;
+            flex-direction: column;
+            /*justify-content: center;*/
+            align-items: center;
+        }
+
+    </style>
 </head>
 <body>
-    <div class = "tela">
-        <div class = "esquerda">
-            <h1>Temas:</h1>
-            <ol>
-                <li>Frutas</li>
-                <li>Animais</li>
-                <li>C.E.P. (Cidade, Estado e Pais)</li>
-                <li>Profissões</li>
-                <li>Objetos</li>
-            </ol>
-        </div>
-        <div>
-            <span>O</span><br>
-            <span>/</span><span>|</span><span>\</span><br>
-            <span>/</span><span>\</span>            
-        </div>
-
-    </div>
     <script src="./script.js" defer></script>
+    <div class = "tela">
+        <div class="janela">
+            <div class = "esquerda">
+                <h1>Temas:</h1>
+                <ol>
+                    <li>Frutas</li>
+                    <li>Animais</li>
+                    <li>C.E.P. (Cidade, Estado e Pais)</li>
+                    <li>Profissões</li>
+                    <li>Objetos</li>
+                </ol>
+            </div>
+            <div class = div-jogo>
+                <h3>Para jogar clique no botão!</h3>
+                <button type="button" onclick="inicia_jogo()">Jogar</button>
+                <div class="boneco">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>
