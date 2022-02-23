@@ -71,6 +71,7 @@ function checador_de_letra (letra, arraypalavra, palavra_resultado) {
 
 
 do {
+    vidas = 7;
     let n = parseInt(prompt("Escolha um tema pelo seu número correspondente: "));
     tema = temaStr(n);
     console.log(tema);
