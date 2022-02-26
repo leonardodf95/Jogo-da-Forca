@@ -230,7 +230,12 @@
             verificaNumeros = true;
             for (i = 0; i <= arraydenumeros.length; i++) {
                 if (letra === arraydenumeros[i]) {
-                    verificaNumeros = false
+                    verificaNumeros = false;
+                }
+                if (letra.length != 1) {
+                    if (letra[i] === arraydenumeros[i]) {
+                        verificaNumeros = false;
+                    }
                 }
             }
 
@@ -245,8 +250,11 @@
                     verificaLetra = false;
                     return alert("Erro! Você digitou um número!");
                 }
-            } else {
+            } else if (letra.length == arraypalavra.length && verificaNumeros == true) {
                 palpiteFnc(letra);
+            } else {
+                verificaLetra = false;
+                return alert("Erro! Palpites só são feitos com letras e não números!!!");
             }
         }
 
