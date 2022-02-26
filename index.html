@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,24 +11,30 @@
             margin: 0;
             padding: 0;
         }
+
         .tela {
             width: 100vw;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+
+
         }
+
         .janela {
             border: 1px solid black;
             display: flex;
             align-items: center;
             justify-content: center;
-            
+
         }
+
         .esquerda {
             margin: 2rem;
-            
+
         }
+
         .div-jogo {
             margin-right: 5px;
             display: flex;
@@ -36,31 +43,321 @@
             align-items: center;
         }
 
+        .boneco {
+            position: absolute;
+            border: 1px solid black;
+        }
+        #cabeca {
+            margin: 0;
+            position: relative;
+            left: 120px;
+            bottom: 500px;
+        }
+
+        #corpo {
+            margin: 0;
+            position: relative;
+
+            bottom: 350px;
+        }
+
+        #bracoEsquerdo {
+
+
+            right: 230px;
+        }
+
+        #bracoDireito {}
+
+        #pernaEsquerda {}
+
+        #pernaDireita {}
     </style>
 </head>
+
 <body>
-    <script src="./script.js" defer></script>
-    <div class = "tela">
+    <script>
+        let obj;
+        fetch('./palavras.json')
+                .then(resp => resp.json())
+                .then((data) => obj = data )
+
+        let boneco;
+        let acertos = 0;
+        let vidas = 7;
+        let letra;
+        let arraypalavra = [];
+        let tema;
+        let letras_erradas = [];
+        let n;
+        let palavra;
+        let palavra_resultado;
+        let contador;
+        let verificaLetra = true;
+        let verificaNumeros = true;
+        let arraydenumeros = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        let letraNovamente = false;
+        let letrasErrada = false;
+        let palpite = [];
+        let verificaPalpite;
+
+        
+        function vidasForca(vidas){
+            if(vidas == 0){
+               boneco = (` _______           
+|          O
+|          /|\\
+|           |
+|          / \\
+|     `)
+     
+           }else if(vidas == 1){
+               boneco = (` _______           
+|          O
+|          /|\\
+|           |
+|          / 
+|`)
+        
+       }else if(vidas == 2){
+               boneco = (` _______           
+|          O
+|          /|\\
+|           |
+|          
+|`)
+        
+       }else if(vidas == 3){
+               boneco = (` _______           
+|          O
+|          /|
+|           |
+|          
+|`)
+        
+       }else if(vidas == 4){
+               boneco = (` _______           
+|          O
+|           |
+|           |
+|          
+|`)
+        
+       }else if(vidas == 5){
+               boneco = (` _______           
+|          O
+|           |
+|          
+|          
+|`)
+        
+       }else if(vidas == 6){
+               boneco = (` _______           
+|          O
+|          
+|          
+|          
+|`)
+        
+       }else if(vidas == 7){
+               boneco = (` _______           
+|          
+|          
+|          
+|          
+|`)
+        
+       }
+       return boneco
+     }
+        
+        function randomm() {
+            return Math.floor(Math.random() * 10);
+        }
+
+        function sorteador_de_palavra(n) {
+            let posicao = randomm();
+            return obj[n - 1][posicao]
+        }
+
+        function temaStr(n) {
+            if (n - 1 == 0) {
+                tema = "Frutas";
+            } else if (n - 1 == 1) {
+                tema = "Animais";
+            } else if (n - 1 == 2) {
+                tema = "Cidade, estado e país";
+            } else if (n - 1 == 3) {
+                tema = "Profissões";
+            } else if (n - 1 == 4) {
+                tema = "Objetos"
+            } else {
+                tema = true;
+            }
+            return tema;
+        }
+
+        function checador_de_letra(letra, arraypalavra, palavra_resultado) {
+            let acertou = false;
+            for (let i = 0; i <= arraypalavra.length; i++) {
+                if (letra == arraypalavra[i]) {
+                    if (letra !== palavra_resultado[i]) {
+                        acertos++;
+                    } else if (letra == palavra_resultado[i]) {
+                        letraNovamente = true;
+                    }
+                    palavra_resultado[i] = letra;
+                    acertou = true;
+                }
+
+            }
+            if (letraNovamente == true) {
+                alert("Você já digitou essa letra!");
+                letraNovamente = false;
+            }
+            console.log(acertou);
+
+            somenteLetras(letra);
+            if (verificaLetra == true) {
+                if (acertou == false) {
+                    for (i = 0; i <= letras_erradas.length; i++) {
+                        if (letra !== letras_erradas[i]) {
+                            letrasErrada = true;
+                        } else if (letra == letras_erradas[i]) {
+                            letrasErrada = false;
+                            letraNovamente = true;
+                        }
+                    }
+                    if (letrasErrada == true) {
+                        if (letraNovamente == false) {
+                            letras_erradas.push(letra);
+                            alert("Você errou!");
+                            vidas--;
+                            letrasErrada = false;
+                        } else if (letraNovamente == true) {
+                            alert("Você já digitou essa letra!");
+                            letraNovamente = false;
+                        }
+                    }
+                    vidasForca(vidas);
+                    alert(boneco);
+                }
+            }
+        }
+
+        function zera_jogo() {
+            if (vidas == 0 || acertos != 0) {
+                vidas = 7;
+                acertos = 0;
+                letras_erradas = [];
+            }
+        }
+
+        function somenteLetras(letra) {
+            verificaLetra = true;
+            verificaNumeros = true;
+            for (i = 0; i <= arraydenumeros.length; i++) {
+                if (letra === arraydenumeros[i]) {
+                    verificaNumeros = false
+                }
+            }
+
+            if (letra.length != arraypalavra.length) {
+                if (letra.length > 1) {
+                    verificaLetra = false;
+                    return alert("Erro! Você digitou mais de uma letra!");
+                } else if (letra.length == 0) {
+                    verificaLetra = false;
+                    return alert("Erro! Você não digitou nada!");
+                } else if (verificaNumeros == false) {
+                    verificaLetra = false;
+                    return alert("Erro! Você digitou um número!");
+                }
+            } else {
+                palpiteFnc(letra);
+            }
+        }
+
+        function palpiteFnc(letra) {
+            palpite = letra.split("");
+            let comparador = 0;
+            for (i = 0; i < palpite.length; i++) {
+                if (palpite[i] == arraypalavra[i]) {
+                    comparador++;
+                    console.log(comparador);
+                }
+            }
+            console.log(comparador);
+            if (comparador == palpite.length) {
+                acertos = parseInt(arraypalavra.length);
+                verificaLetra = false;
+            } else {
+                vidas = 0;
+                verificaLetra = false;
+                alert("A palavra era " + palavra);
+                vidasForca(vidas);
+                alert(boneco);
+            }
+        }
+
+        function inicia_jogo() {
+            zera_jogo();
+
+            n = parseInt(prompt("Escolha um tema pelo seu número correspondente: "));
+            tema = temaStr(n);
+            while (tema == true) {
+                n = parseInt(prompt("Tema inválido! Escolha um tema pelo seu número correspondente: "));
+                tema = temaStr(n);
+            }
+            palavra = sorteador_de_palavra(n);
+            console.log(palavra);
+            palavra = palavra.toUpperCase();
+            console.log(palavra);
+            arraypalavra = palavra.split("");
+            palavra_resultado = arraypalavra.map(char => {
+                return '_'
+            });
+            console.log(palavra_resultado);
+            alert("O tema escolhido foi: " + tema);
+            alert("Sua palavra possui " + arraypalavra.length + " letras.");
+            contador = arraypalavra.length;
+            while (vidas > 0 && acertos < contador) {
+                letra = prompt("Tema escolhido: " + tema + "\n Letras erradas: " + letras_erradas + "\n Sua palavra: " +
+                    palavra_resultado + "\nInsira a letra ou seu palpite:");
+                letra = letra.toUpperCase();
+                checador_de_letra(letra, arraypalavra, palavra_resultado);
+            };
+            if (acertos == contador) {
+                palavra = palavra.toUpperCase();
+                alert("A palava era " + palavra + "\nParabéns, você ganhou!");
+            } else {
+                
+                alert("Que pena, você perdeu!");
+            }
+        }
+    </script>
+    
+    
+    <div class="tela">
         <div class="janela">
-            <div class = "esquerda">
+            <div class="esquerda">
                 <h1>Temas:</h1>
                 <ol>
-                    <li>Frutas</li>
-                    <li>Animais</li>
-                    <li>C.E.P. (Cidade, Estado e Pais)</li>
-                    <li>Profissões</li>
-                    <li>Objetos</li>
+                    <li id="Tema-frutas">Frutas</li>
+                    <li class="Tema-animais">Animais</li>
+                    <li class="Tema-cep">C.E.P. (Cidade, Estado e Pais)</li>
+                    <li class="Tema-profissoes">Profissões</li>
+                    <li class="Tema-objetos">Objetos</li>
                 </ol>
             </div>
-            <div class = div-jogo>
+            <div class=div-jogo>
                 <h3>Para jogar clique no botão!</h3>
-                <button type="button" onclick="inicia_jogo()">Jogar</button>
-                <div class="boneco">
-                    <span></span>
-                </div>
+                <button type="button" onclick="inicia_jogo()">JOGAR</button>
             </div>
         </div>
+
     </div>
     
 </body>
+
 </html>
